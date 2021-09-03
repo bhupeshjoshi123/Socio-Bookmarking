@@ -12,16 +12,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.semanticsquare.thrillio.constants.BookGenre;
-import com.semanticsquare.thrillio.constants.Gender;
-import com.semanticsquare.thrillio.constants.MovieGenre;
-import com.semanticsquare.thrillio.constants.UserType;
-import com.semanticsquare.thrillio.entities.Bookmark;
-import com.semanticsquare.thrillio.entities.User;
-import com.semanticsquare.thrillio.entities.UserBookmark;
-import com.semanticsquare.thrillio.managers.BookmarkManager;
-import com.semanticsquare.thrillio.managers.UserManager;
-import com.semanticsquare.thrillio.util.IOUtil;
+import com.thrillio.constants.BookGenre;
+import com.thrillio.constants.Gender;
+import com.thrillio.constants.MovieGenre;
+import com.thrillio.constants.UserType;
+import com.thrillio.entities.Bookmark;
+import com.thrillio.entities.User;
+import com.thrillio.entities.UserBookmark;
+import com.thrillio.managers.BookmarkManager;
+import com.thrillio.managers.UserManager;
+import com.thrillio.util.IOUtil;
 
 public class DataStore {
 	// all  users
