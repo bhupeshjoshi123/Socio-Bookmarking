@@ -31,7 +31,7 @@ public class View {
                 if(user.getUserType().equals(UserType.EDITOR) || user.getUserType().equals(UserType.CHIEF_EDITOR)){
                     //mark as kid friendly
                     if(bookmark.IsKidFriendlyEligible() && bookmark.getKidFriendlyStatus().equals(KidFriendlyStatus.UNKNOWN)){
-                        String kidFriendlyStatus = getKidFriendlyStatusDecision(bookmark);
+                         KidFriendlyStatus kidFriendlyStatus = getKidFriendlyStatusDecision(bookmark);
 
                         if(!kidFriendlyStatus.equals(KidFriendlyStatus.UNKNOWN)){
                             BookmarkController.getInstance().setKidFriendlyStatus(user,kidFriendlyStatus,bookmark);
