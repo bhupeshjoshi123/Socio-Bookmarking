@@ -2,6 +2,13 @@ package com.thrillio.managers;
 
 import com.thrillio.dao.BookmarkDao;
 import com.thrillio.entities.*;
+import java.util.List;
+import java.util.Map;
+
+import com.thrillio.constants.BookGenre;
+import com.thrillio.constants.KidFriendlyStatus;
+import com.thrillio.constants.MovieGenre;
+
 
 public class BookmarkManagers {
 
@@ -14,77 +21,82 @@ public class BookmarkManagers {
         return instance;
     }
 
-    public WebLink createWebLink(long id,String title,String url,String host){
-        WebLink webLink = new WebLink();
+   public Movie createMovie(long id, String title, String profileUrl, int releaseYear, String[] cast,
+			String[] directors, MovieGenre genre, double imdbRating) {
+		Movie movie = new Movie();
+		movie.setId(id);
+		movie.setTitle(title);
+		movie.setProfileUrl(profileUrl);
+		movie.setReleaseYear(releaseYear);
+		movie.setCast(cast);
+		movie.setDirectors(directors);
+		movie.setGenre(genre);
+		movie.setImdbRating(imdbRating);
 
-        webLink.setId(id);
-        webLink.setTitle(title);
-        webLink.setUrl(url);
-        webLink.setHost(host);
+		return movie;
+	}
 
-        return webLink;
-    }
-    public Book createBook(long id, String title,int publicationYear, String publisher, String [] authors, String genre,double amazonRating){
-        Book book = new Book();
+	public Book createBook(long id, String title, String profileUrl, int publicationYear, String publisher,
+			String[] authors, BookGenre genre, double amazonRating) {
+		Book book = new Book();
+		book.setId(id);
+		book.setTitle(title);
+		book.setProfileUrl(profileUrl);
+		book.setPublicationYear(publicationYear);
+		book.setPublisher(publisher);
+		book.setAuthors(authors);
+		book.setGenre(genre);
+		book.setAmazonRating(amazonRating);
 
-        book.setId(id);
-        book.setTitle(title);
+		return book;
+	}
 
-        book.setPublicationYear(publicationYear);
-        book.setPublisher(publisher);
-        book.setAuthors(authors);
-        book.setGenre(genre);
-        book.setAmazonRating(amazonRating);
+	public WebLink createWebLink(long id, String title, String profileUrl, String url, String host) {
+		WebLink weblink = new WebLink();
+		weblink.setId(id);
+		weblink.setTitle(title);
+		weblink.setProfileUrl(profileUrl);
+		weblink.setUrl(url);
+		weblink.setHost(host);
 
-        return book;
+		return weblink;
+	}
 
-    }
-    public Movie createMovie(long id, String title, String profileURL, int releaseYear, String [] cast, String[] directors, String genre, double imdbRating){
-        Movie movie = new Movie();
+	public Map<Integer, List<Bookmark>> getBookmarks() {
+		return dao.getBookmarks();
+	}
 
-        movie.setId(id);
-        movie.setTitle(title);
-        movie.setProfileUrl(profileURL);
-        movie.setReleaseYear(releaseYear);
-        movie.setCast(cast);
-        movie.setDirectors(directors);
-        movie.setGenre(genre);
-        movie.setImbRating(imdbRating);
+	public void saveUserBookmark(User user, Bookmark bookmark) {
+		UserBookmark userBookmark = new UserBookmark();
+		userBookmark.setUser(user);
+		userBookmark.setBookmark(bookmark);
+		
 
-        return movie;
+		
+		dao.saveUserBookmark(userBookmark);
+	}
 
-    }
+	public void setKidFriendlyStatus(User user, KidFriendlyStatus kidFriendlyChoice, Bookmark bookmark) {
+		bookmark.setKidFriendlyStatus(kidFriendlyChoice);
+		bookmark.setKidFriendlyMarkedBy(user);
+		
+		dao.updateKidFriendlyStatus(bookmark);
+		System.out.println("Kid friendly status: "+ kidFriendlyChoice + ", Marked by: "+ user.getEmail() + ", "+ bookmark);
+	}
 
-    public Bookmark[][] getBookmarks(){
-        return dao.getBookmarks();
-    }
+	public static void share(User user, Bookmark bookmark) {
+		bookmark.setSharedBy(user);
+		System.out.println("Data to be shared: ");
 
-    public void saveUserBookmark(User user, Bookmark bookmark) {
-        UserBookmark userBookmark = new UserBookmark();
-        userBookmark.setUser(user);
-        userBookmark.setBookmark(bookmark);
-
-        //passing to the Dao for SQL stuffs
-        dao.saveUserBookmark(userBookmark);
-    }
-
-    public void setKidFriendlyStatus(User user, String kidFriendlyStatus, Bookmark bookmark) {
-        bookmark.setKidFriendlyStatus(kidFriendlyStatus);
-        bookmark.setKidFriendlyMarkedBy(user);
-
-        System.out.println("Kid Friendly Status: " + kidFriendlyStatus + ", Marked By" + user.getEmail()+","+bookmark);
-    }
-
-    public void share(User user, Bookmark bookmark) {
-        bookmark.setSharedBy(user);
-
-        System.out.println("Data to be Shared:");
-
-        if(bookmark instanceof Book){
-            System.out.println(((Book)bookmark).getItemData());
-        }
-        else if(bookmark instanceof WebLink){
-            System.out.println(((WebLink)bookmark).getItemData());
-        }
+		if(!(bookmark instanceof Movie)) dao.updateSharedBy(bookmark);
+        
+		if(bookmark instanceof Book) {
+			System.out.println(((Book)bookmark).getItemData());	
+		}
+		else if(bookmark instanceof WebLink) {
+			System.out.println(((WebLink)bookmark).getItemData());	
+		}
+		
+	
     }
 }
